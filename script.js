@@ -8,5 +8,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 fetch('data/world.geojson')
     .then(r => r.json())
-    .then(data => {L.geoJSON(data).addTo(map);})
+    .then(data => {
+        L.geoJSON(data, {
+        onEachFeature: function(feature, layer) {
+            const countryName = feature.properties?.NAME || 'No Name';
+            layer.bindPopup(countryName);
+        }
+        }).addTo(map);
+    })
     .catch(err => console.error('Error loading GeoJSON:', err));
